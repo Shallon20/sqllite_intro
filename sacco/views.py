@@ -25,3 +25,6 @@ def test(request):
     return HttpResponse(f"Ok, Done, we have {customer_count} customers and {deposit_count} deposits")
 
 
+def customers(request):
+    data = Customer.objects.all() # select * from customers
+    return render(request, 'customers.html', {"customers" : data} )
