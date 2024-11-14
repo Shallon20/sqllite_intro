@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from sacco.models import Customer, Deposit
 
@@ -28,3 +28,9 @@ def test(request):
 def customers(request):
     data = Customer.objects.all() # select * from customers
     return render(request, 'customers.html', {"customers" : data} )
+
+
+def delete_customer(request, customer_id):
+    customer = Customer.objects.get(id=customer_id) # select * from customers where id=7
+    customer.delete() # delete from customers where id =
+    return redirect('customers')

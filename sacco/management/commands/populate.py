@@ -112,3 +112,4 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS('Successfully populated customers')
         )
+        print("Popolated customers")
