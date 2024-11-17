@@ -1,0 +1,44 @@
+{% extends 'master.html' %}
+
+{% block title %}
+    <title>Search Results</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <h2>Sacco Customers</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Joining Date</th>
+            <th>Delete</th>
+            <th>Details</th>
+            <th>Update</th>
+        </tr>
+        {% for customer in data.object_list %}
+        	<tr>
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.first_name }}</td>
+                <td>{{ customer.last_name }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.created_at }}</td>
+                <td>
+                    <a class="btn btn-danger" href="{% url 'delete_customer' customer.id %}">Remove</a>
+                </td>
+                <td>
+                    <a class="btn btn-primary" href="{% url 'customer_details' customer.id %}">Details</a>
+                </td>
+                <td>
+                    <a class="btn btn-success" href="{% url 'update_customer' customer.id %}">Update</a>
+                </td>
+            </tr>
+        {% empty %}
+        	<p>No customers found</p>
+        {% endfor %}
+        
+    </table>
+    </div>
+{% endblock %}
