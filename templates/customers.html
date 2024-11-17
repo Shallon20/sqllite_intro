@@ -16,6 +16,7 @@
             <th>Joining Date</th>
             <th>Delete</th>
             <th>Details</th>
+            <th>Update</th>
         </tr>
         {% for customer in data.object_list %}
         	<tr>
@@ -29,6 +30,9 @@
                 </td>
                 <td>
                     <a class="btn btn-primary" href="{% url 'customer_details' customer.id %}">Details</a>
+                </td>
+                <td>
+                    <a class="btn btn-success" href="{% url 'update_customer' customer.id %}">Update</a>
                 </td>
             </tr>
         {% empty %}
