@@ -2,70 +2,77 @@
 {% load static %}
 
 {% block title %}
-    <title>Customers Details</title>
+	<title>Customer Details</title>
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-    <div class="row mt-2">
-        <div class="col-sm-4">
-            <table class="table table-striped">
-                <tr>
-                    <td class="h6">First Name</td>
-                    <td>{{ customer.first_name }}</td>
-                </tr>
-                <tr>
-                    <td class="h6">Last Name</td>
-                    <td>{{ customer.last_name }}</td>
-                </tr>
-                <tr>
-                    <td class="h6">Email</td>
-                    <td>{{ customer.email }}</td>
-                </tr>
-                <tr>
-                    <td class="h6">Date Of Birth</td>
-                    <td>{{ customer.dob | date:"d-m-Y" }}</td>
-                </tr>
-                <tr>
-                    <td class="h6">Gender</td>
-                    <td>{{ customer.gender }}</td>
-                </tr>
-                <tr>
-                    <td class="h6">Weight in Kgs</td>
-                    <td>{{ customer.weight }}</td>
-                </tr>
-                <tr>
-                    <td class="h6">Total Deposit</td>
-                    <td>{{ total }}</td>
-                </tr>
-            </table>
-        </div>
-        <div class="col-sm-4">
-            <p class="text-center">Profile Picture</p>
-            {% if customer.profile_pic %}
-                <img class="img-fluid mx-auto d-block profile" src="{{ customer.profile_pic.url }}" alt="">
-            {% else %}
-                <img class="img-fluid mx-auto d-block profile" src="{% static 'profile.png' %}" alt="">
-            {% endif %} 
-            
-        </div>
-        <div class="col-sm-4">
-            <table class="table table-bordered">
-                <tr>
-                    <th>Date</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                </tr>
-                {% for deposit in deposits %}
+	<div class="container">
+       <div class="row border mt-2 p-2">
+           <div class="col-sm-4">
+               <table class="table table-striped">
+                   
+                   <tr>
+                       <th>#</th>
+                       <th>Value</th>
+                   </tr>
+                   
+                   <tr>
+                       <td class="h6">First Name</td>
+                       <td>{{ customer.first_name }}</td>
+                   </tr>
+                   
                     <tr>
-                        <td>{{ deposit.created_at | date:"d-m-Y" }}</td>
-                        <td>{{ deposit.amount }}</td>
-                        <td>{{ deposit.status }}</td>
-                    </tr>                	
-                {% endfor %}
-                
-            </table>
-        </div>
-    </div>
+                       <td class="h6">Last Name</td>
+                       <td>{{ customer.last_name }}</td>
+                   </tr>
+                   
+                   <tr>
+                       <td class="h6">Email</td>
+                       <td>{{ customer.email }}</td>
+                   </tr>
+                   
+                   <tr>
+                       <td class="h6">Date Of Birth</td>
+                       <td>{{ customer.dob }}</td>
+                   </tr>
+                   
+                   <tr>
+                       <td class="h6">Joining Date</td>
+                       <td>{{ customer.created_at | date:"d-m-Y" }}</td>
+                   </tr>
+                   
+                   <tr>
+                       <td class="h6">Gender</td>
+                       <td>{{ customer.gender }}</td>
+                   </tr>
+                   
+                   <tr>
+                       <td class="h6">Weight</td>
+                       <td>{{ customer.weight }}</td>
+                   </tr>
+               </table>
+           </div>
+           <div class="col-sm-4">
+               <p class="text-center">Profile Picture</p>
+               <img class="img-fluid mx-auto d-block profile" src="{% static 'default.png' %}" alt="">
+           </div>
+           <div class="col-sm-4">
+               <p>Deposits</p>
+               <table class="table table-striped">
+                   <tr>
+                       <th>Date</th>
+                       <th>Amount</th>
+                       <th>Status</th>
+                   </tr>
+                   {% for deposit in deposits %}
+                       <tr>
+                           <td>{{ deposit.created_at | date:"d-m-Y" }}</td>
+                           <td>{{ deposit.amount }}</td>
+                           <td>{{ deposit.status }}</td>
+                       </tr>
+                   {% endfor %}
+               </table>
+           </div>
+       </div>
     </div>
 {% endblock %}

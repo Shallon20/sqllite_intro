@@ -30,7 +30,7 @@ class Customer(models.Model):
 class Deposit(models.Model):
     amount = models.IntegerField()
     status = models.BooleanField(default=False)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='deposits')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

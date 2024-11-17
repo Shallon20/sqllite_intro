@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q, Sum
 from django.http import HttpResponse
@@ -42,6 +43,7 @@ def customers(request):
 def delete_customer(request, customer_id):
     customer = Customer.objects.get(id=customer_id) # select * from customers where id=7
     customer.delete() # delete from customers where id =
+    messages.info(request, f"Customer {customer.first_name} was deleted")
     return redirect('customers')
 
 
@@ -52,6 +54,7 @@ def add_customer(request):
         form = CustomerForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, f"Customer {form.cleaned_data['first_name']} was added")
             return redirect('customers')
     else:
         form = CustomerForm()
@@ -70,6 +73,7 @@ def update_customer(request, customer_id):
         form = CustomerForm(request.POST, request.FILES, instance=customer)
         if form.is_valid():
             form.save()
+            messages.success(request, f"Customer {form.cleaned_data['first_name']} was updated")
             return redirect('customers')
     else:
         form = CustomerForm(instance=customer)
@@ -91,6 +95,7 @@ def deposit(request, customer_id):
             amount = form.cleaned_data['amount']
             depo = Deposit(amount=amount, status=True, customer=customer)
             depo.save()
+            messages.success(request, 'Your deposit has been successfully saved')
             return redirect('customers')
     else:
         form = DepositForm()
