@@ -41,7 +41,13 @@
             </table>
         </div>
         <div class="col-sm-4">
-            <img src="{% static 'profile.png' %}" alt="">
+            <p class="text-center">Profile Picture</p>
+            {% if customer.profile_pic %}
+                <img class="img-fluid mx-auto d-block profile" src="{{ customer.profile_pic.url }}" alt="">
+            {% else %}
+                <img class="img-fluid mx-auto d-block profile" src="{% static 'profile.png' %}" alt="">
+            {% endif %} 
+            
         </div>
         <div class="col-sm-4">
             <table class="table table-bordered">
@@ -50,11 +56,11 @@
                     <th>Amount</th>
                     <th>Status</th>
                 </tr>
-                {% for depo in deposits %}
+                {% for deposit in deposits %}
                     <tr>
-                        <td>{{ depo.created_at | date:"d-m-Y" }}</td>
-                        <td>{{ depo.amount }}</td>
-                        <td>{{ depo.status }}</td>
+                        <td>{{ deposit.created_at | date:"d-m-Y" }}</td>
+                        <td>{{ deposit.amount }}</td>
+                        <td>{{ deposit.status }}</td>
                     </tr>                	
                 {% endfor %}
                 

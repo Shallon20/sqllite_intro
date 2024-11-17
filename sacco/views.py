@@ -49,7 +49,7 @@ def delete_customer(request, customer_id):
 
 def add_customer(request):
     if request.method == "POST":
-        form = CustomerForm(request.POST)
+        form = CustomerForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('customers')
@@ -67,7 +67,7 @@ def customer_details(request, customer_id):
 def update_customer(request, customer_id):
     customer = get_object_or_404(Customer, id=customer_id)
     if request.method == "POST":
-        form = CustomerForm(request.POST, instance=customer)
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
         if form.is_valid():
             form.save()
             return redirect('customers')
@@ -97,5 +97,5 @@ def deposit(request, customer_id):
     return render(request, 'deposit_form.html', { "form": form, "customer": customer})
 # pip install django-crispy-forms
 # pip install crispy-bootstraps
-
+# pip install Pillow
 # pip freeze > requirements.txt  -- updates everything that you had installed or updated in previous project
