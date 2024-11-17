@@ -78,3 +78,5 @@ def update_customer(request, customer_id):
 
 # pip install django-crispy-forms
 # pip install crispy-bootstraps
+
+# pip freeze > requirements.txt  -- updates everything that you had installed or updated in previous project
