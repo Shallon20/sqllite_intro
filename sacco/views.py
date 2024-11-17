@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -59,8 +59,9 @@ def add_customer(request):
 
 def customer_details(request, customer_id):
     customer = Customer.objects.get(id=customer_id)
-    deposits =Deposit.objects.filter(customer_id=customer_id)
-    return render(request, "details.html", {"deposits":deposits, "customer":customer})
+    deposits = customer.deposits.all()
+    total = Deposit.objects.filter(customer=customer).filter(status=True).aggregate(Sum('amount'))['amount__sum']
+    return render(request, "details.html", {"customer": customer, "deposits": deposits, "total":total})
 
 
 def update_customer(request, customer_id):
@@ -78,7 +79,7 @@ def search_customer(request):
     search_term = request.GET.get('search')
     data = Customer.objects.filter( Q(first_name__icontains=search_term) | Q(last_name__icontains=search_term) | Q(email__icontains=search_term))
     # select * from customers where first_name LIKE '%noel%' OR last_name LIKE '%juma%' OR email LIKE '%juma@gmail.com%'
-    data = Customer.objects.all().order_by('id').values()
+    # data = Customer.objects.all().order_by('id').values()
     return render(request, 'search.html', {"customers":data})
 
 
@@ -93,8 +94,7 @@ def deposit(request, customer_id):
             return redirect('customers')
     else:
         form = DepositForm()
-
-    return render(request, 'deposit_form.html', { "form": form, "customer": form})
+    return render(request, 'deposit_form.html', { "form": form, "customer": customer})
 # pip install django-crispy-forms
 # pip install crispy-bootstraps
 
