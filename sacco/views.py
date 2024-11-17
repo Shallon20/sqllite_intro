@@ -58,3 +58,7 @@ def add_customer(request):
 
 # pip install django-crispy-forms
 # pip install crispy-bootstraps
+def customer_details(request, customer_id):
+    customer = Customer.objects.get(id=customer_id)
+    deposits =Deposit.objects.filter(customer_id=customer_id)
+    return render(request, "details.html", {"deposits":deposits, "customer":customer})
