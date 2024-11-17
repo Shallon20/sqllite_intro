@@ -17,6 +17,7 @@
             <th>Delete</th>
             <th>Details</th>
             <th>Update</th>
+            <th>Deposit</th>
         </tr>
         {% for customer in data.object_list %}
         	<tr>
@@ -34,6 +35,9 @@
                 <td>
                     <a class="btn btn-success" href="{% url 'update_customer' customer.id %}">Update</a>
                 </td>
+                <td>
+                    <a class="btn btn-primary" href="{% url 'deposit' customer.id %}">Deposit</a>
+                </td>
             </tr>
         {% empty %}
         	<p>No customers in the sacco</p>
@@ -44,11 +48,11 @@
         <div class="col-sm-2">
             {% if data.has_previous %}
                 <a class="btn btn-outline-info btn-sm" href="?page={{ data.previous_page_number }}"></a>
-            {% endif %} 
+            {% endif %}
             <span>{{ data.number }}</span>
             {% if data.has_next %}
                 <a class="btn btn-outline-info btn-sm" href="?page={{ data.next_page_number }}"></a>
-            {% endif %} 
+            {% endif %}
         </div>
     </div>
     </div>
