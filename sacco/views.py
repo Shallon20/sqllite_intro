@@ -28,7 +28,7 @@ def test(request):
 
 
 def customers(request):
-    data = Customer.objects.all().order_by('id').values() # select * from customers
+    data = Customer.objects.all().order_by('-id').values() # select * from customers
     paginator = Paginator(data, 15)
     page_number = request.GET.get('page', 1)
     try:
