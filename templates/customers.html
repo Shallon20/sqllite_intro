@@ -26,18 +26,28 @@
                 <td>{{ customer.last_name }}</td>
                 <td>{{ customer.email }}</td>
                 <td>{{ customer.created_at }}</td>
-                <td>
-                    <a class="btn btn-danger" href="{% url 'delete_customer' customer.id %}">Remove</a>
-                </td>
-                <td>
-                    <a class="btn btn-primary" href="{% url 'customer_details' customer.id %}">Details</a>
-                </td>
-                <td>
-                    <a class="btn btn-success" href="{% url 'update_customer' customer.id %}">Update</a>
-                </td>
-                <td>
-                    <a class="btn btn-primary" href="{% url 'deposit' customer.id %}">Deposit</a>
-                </td>
+            
+                {% if perms.sacco.delete_customer %} <!-- request.user.has_perm -->
+                	<td>
+                        <a class="btn btn-danger" href="{% url 'delete_customer' customer.id %}">Remove</a>
+                    </td>
+                {% endif %} 
+                {% if perms.sacco.view_customer %} <!-- request.user.has_perm -->
+                	<td>
+                        <a class="btn btn-primary" href="{% url 'customer_details' customer.id %}">Details</a>
+                    </td>
+                {% endif %}
+                {% if perms.sacco.change_customer %} <!-- request.user.has_perm -->
+                	<td>
+                        <a class="btn btn-success" href="{% url 'update_customer' customer.id %}">Update</a>
+                    </td>
+                {% endif %}
+                {% if perms.sacco.add_deposit %} <!-- request.user.has_perm -->
+                	<td>
+                        <a class="btn btn-primary" href="{% url 'deposit' customer.id %}">Deposit</a>
+                    </td>
+                {% endif %}
+                
             </tr>
         {% empty %}
         	<p>No customers in the sacco</p>

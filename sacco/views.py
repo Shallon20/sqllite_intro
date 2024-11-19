@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q, Sum
 from django.http import HttpResponse
@@ -28,7 +30,7 @@ def test(request):
 
     return HttpResponse(f"Ok, Done, we have {customer_count} customers and {deposit_count} deposits")
 
-
+@login_required
 def customers(request):
     data = Customer.objects.all().order_by('-id').values() # select * from customers
     paginator = Paginator(data, 15)
@@ -39,7 +41,8 @@ def customers(request):
         paginated_data = paginator.page(1)
     return render(request, 'customers.html', {"data" : paginated_data} )
 
-
+@login_required
+@permission_required("sacco.delete_customer", raise_exception=True)
 def delete_customer(request, customer_id):
     customer = Customer.objects.get(id=customer_id) # select * from customers where id=7
     customer.delete() # delete from customers where id =
@@ -47,8 +50,8 @@ def delete_customer(request, customer_id):
     return redirect('customers')
 
 
-
-
+@login_required
+@permission_required("sacco.add_customer", raise_exception=True)
 def add_customer(request):
     if request.method == "POST":
         form = CustomerForm(request.POST, request.FILES)
@@ -60,13 +63,16 @@ def add_customer(request):
         form = CustomerForm()
     return render(request, 'customer_form.html', {"form": form})
 
+@login_required
+@permission_required("sacco.view_customer", raise_exception=True)
 def customer_details(request, customer_id):
     customer = Customer.objects.get(id=customer_id)
     deposits = customer.deposits.all()
     total = Deposit.objects.filter(customer=customer).filter(status=True).aggregate(Sum('amount'))['amount__sum']
     return render(request, "details.html", {"customer": customer, "deposits": deposits, "total":total})
 
-
+@login_required
+@permission_required("sacco.change_customer", raise_exception=True)
 def update_customer(request, customer_id):
     customer = get_object_or_404(Customer, id=customer_id)
     if request.method == "POST":
@@ -79,6 +85,8 @@ def update_customer(request, customer_id):
         form = CustomerForm(instance=customer)
     return render(request, 'customer_update_form.html', {"form": form})
 
+@login_required
+@permission_required("sacco.view_customer", raise_exception=True)
 def search_customer(request):
     search_term = request.GET.get('search')
     data = Customer.objects.filter( Q(first_name__icontains=search_term) | Q(last_name__icontains=search_term) | Q(email__icontains=search_term))
@@ -86,7 +94,8 @@ def search_customer(request):
     # data = Customer.objects.all().order_by('id').values()
     return render(request, 'search.html', {"customers":data})
 
-
+@login_required
+@permission_required("sacco.add_deposit", raise_exception=True)
 def deposit(request, customer_id):
     customer = get_object_or_404(Customer, id=customer_id)
     if request.method == "POST":
@@ -102,11 +111,25 @@ def deposit(request, customer_id):
     return render(request, 'deposit_form.html', { "form": form, "customer": customer})
 
 def login_user(request):
-    form = LoginForm()
-    return render(request, 'login_form.html', {"form":form})
+    if request.method == "GET":
+        form = LoginForm()
+        return render(request, 'login_form.html', {"form":form})
+    elif request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user) # sessions stored on server # cookies stored in browser
+                return redirect('customers')
+        messages.error(request, "Invalid username or password")
+        return render(request, 'login_form.html', {"form":form})
 
+@login_required
 def signout_user(request):
-    return None
+    logout(request)
+    return redirect('login')
 # pip install django-crispy-forms
 # pip install crispy-bootstraps
 # pip install Pillow
