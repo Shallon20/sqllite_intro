@@ -4,7 +4,7 @@ from django.db.models import Q, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from sacco.app_forms import CustomerForm, DepositForm
+from sacco.app_forms import CustomerForm, DepositForm, LoginForm
 from sacco.models import Customer, Deposit
 
 
@@ -100,7 +100,17 @@ def deposit(request, customer_id):
     else:
         form = DepositForm()
     return render(request, 'deposit_form.html', { "form": form, "customer": customer})
+
+def login_user(request):
+    form = LoginForm()
+    return render(request, 'login_form.html', {"form":form})
+
+def signout_user(request):
+    return None
 # pip install django-crispy-forms
 # pip install crispy-bootstraps
 # pip install Pillow
 # pip freeze > requirements.txt  -- updates everything that you had installed or updated in previous project
+
+
+
